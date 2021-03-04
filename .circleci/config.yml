@@ -1,109 +1,108 @@
 version: 2.1
 
 orbs:
-  codecov: codecov/codecov@1.1.3
-  cypress: cypress-io/cypress@1
-  sonarcloud: sonarsource/sonarcloud@1.0.2
+    codecov: codecov/codecov@1.1.3
+    cypress: cypress-io/cypress@1
+    sonarcloud: sonarsource/sonarcloud@1.0.2
 
 jobs:
-  install:
-    docker:
-      - image: node:15
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - run:
-          name: Install dependencies
-          command: |
-            yarn install --frozen-lockfile
-      
-      - save_cache:
-          paths:
-            - ~/.cache/yarn
-            - node_modules
-          key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
-  build:
-    docker:
-      - image: node:15
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - run:
-          name: Install and Build
-          command: |
-            yarn install --frozen-lockfile
-            yarn build
-      - run:
-          name: Check dist folder
-          command: |
-            cd ./dist
-            ls -la
-  unit-tests:
-    docker:
-      - image: node:15
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - run:
-          name: Running Unit tests
-          command: |
-            yarn install --frozen-lockfile
-            yarn test:unit
-      - codecov/upload:
-          file: './coverage/clover.xml'
-          token: 8364ce65-0448-4611-876b-5adafa526a65
-  code-check:
-    docker:
-      - image: node:15
-    steps:
-      - checkout
-      - sonarcloud/scan
+    install:
+        docker:
+            - image: node:15
+        steps:
+            - checkout
+            - restore_cache:
+                  keys:
+                      - npm-packages-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - run:
+                  name: Install dependencies
+                  command: |
+                      npm install --frozen-lockfile
+
+            - save_cache:
+                  paths:
+                      - ~/.cache/yarn
+                      - node_modules
+                  key: npm-packages-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+    build:
+        docker:
+            - image: node:15
+        steps:
+            - checkout
+            - restore_cache:
+                  keys:
+                      - npm-packages-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - run:
+                  name: Install and Build
+                  command: |
+                      npm install --frozen-lockfile
+                      npm run build
+            - run:
+                  name: Check dist folder
+                  command: |
+                      cd ./dist
+                      ls -la
+    # unit-tests:
+    #     docker:
+    #         - image: node:15
+    #     steps:
+    #         - checkout
+    #         - restore_cache:
+    #               keys:
+    #                   - npm-packages-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+    #         - run:
+    #               name: Running Unit tests
+    #               command: |
+    #                   npm install --frozen-lockfile
+    #                   npm run test
+    #         - codecov/upload:
+    #               file: './coverage/clover.xml'
+    #               token: 8364ce65-0448-4611-876b-5adafa526a65
+    code-check:
+        docker:
+            - image: node:15
+        steps:
+            - checkout
+            - sonarcloud/scan
 
 workflows:
-  version: 2
-  Build_Check_Tests:
-    jobs:
-      - install:
-          filters:
-              branches:
-                only:
-                  - main
-      - build:
-          requires:
-            - install
-          filters:
-              branches:
-                only:
-                  - main
-      - unit-tests:
-          requires:
-            - install
-          filters:
-              branches:
-                only:
-                  - main
-      - code-check:
-          requires:
-            - install
-          context: SonarCloud
-          filters:
-              branches:
-                only:
-                  - main
-      - cypress/run:
-          requires:
-              - install
-          cache-key: 'yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}'
-          yarn: true
-          start: yarn serve
-          wait-on: 'http://localhost:8080'
-          filters:
-              branches:
-                only:
-                  - main
+    version: 2
+    Build_Check_Tests:
+        jobs:
+            - install:
+                  filters:
+                      branches:
+                          only:
+                              - main
+            - build:
+                  requires:
+                      - install
+                  filters:
+                      branches:
+                          only:
+                              - main
+            # - unit-tests:
+            #       requires:
+            #           - install
+            #       filters:
+            #           branches:
+            #               only:
+            #                   - main
+            - code-check:
+                  requires:
+                      - install
+                  context: SonarCloud
+                  filters:
+                      branches:
+                          only:
+                              - main
+            - cypress/run:
+                  requires:
+                      - install
+                  cache-key: 'npm-packages-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}'
+                  start: npm run dev
+                  wait-on: 'http://localhost:5000'
+                  filters:
+                      branches:
+                          only:
+                              - main
