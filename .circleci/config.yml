@@ -40,7 +40,7 @@ jobs:
             - run:
                   name: Check dist folder
                   command: |
-                      cd ./dist
+                      cd ./public/build
                       ls -la
     # unit-tests:
     #     docker:
