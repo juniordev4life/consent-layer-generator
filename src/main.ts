@@ -1,10 +1,7 @@
-import App from './App.svelte';
+import Layer from './Layer.svelte'
 
-const app = new App({
-	target: document.body,
-	props: {
-		name: 'world'
-	}
-});
+const layer = new Layer({
+	target: document.querySelector('#jdl-consent-layer'),
+})
 
-export default app;
+export default layer
