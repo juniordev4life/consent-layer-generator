@@ -4,6 +4,9 @@ export interface ConsentElement {
 	fieldName: string
 	callbackFunction: string
 	setAsDefault: boolean
+	cookieName: string
+	cookieValue: string
+	cookieExpire: number
 	cookies: [
 		{
 			name: string

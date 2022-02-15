@@ -6,9 +6,23 @@
 
 		<title>Svelte app</title>
 
+		<!--
+___________   _______________________________________^__
+ ___   ___ |||  ___   ___   ___    ___ ___  |   __  ,----\
+|   | |   |||| |   | |   | |   |  |   |   | |  |  | |_____\
+|___| |___|||| |___| |___| |___|  | O | O | |  |  |        \
+           |||                    |___|___| |  |__|  DB     )
+___________|||______________________________|______________/
+           |||                                        /--------
+-----------'''---------------------------------------/-------
+--------------- We are hiring! ----------------------
+
+You want to be a part of our ride? Come on board and join us.
+https://karriere.deutschebahn.com/service/search/karriere-de/2653760?qli=true&query=&operationsarea=Informatik&legalentity=Deutsche+Bahn+Connect+GmbH&sort=pubExternalDate_tdt
+-->
+
 		<link rel="icon" type="image/png" href="/favicon.png" />
-		<link rel="stylesheet" href="/global.css" />
-		<!-- <link rel="stylesheet" href="/build/bundle.css" /> -->
+		<link rel="stylesheet" href="/build/dbc-consentlayer.css" />
 		<!-- Matomo -->
 		<script type="text/javascript">
 			var _paq = (window._paq = window._paq || [])
@@ -34,69 +48,120 @@
 	</head>
 
 	<body>
-		<div id="jdl-consent-layer"></div>
+		<div id="dbc-consent-banner"></div>
+		<div id="dbc-consent-settings"></div>
+		<span id="dbc-consent-modal"></span>
 		<script>
 			var consentLayerConfig = {
-				headline: 'Consent Layer',
-				bodytext: 'That os a long body text for normal hints to a consent layer behaviour',
+				language: 'DE-de',
 				matomo: true,
-				layers: [
-					{
-						name: 'Notwendige Funktionen',
-						text:
-							'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam',
-						fieldName: 'hello',
-						callbackFunction: 'hello',
-						setAsDefault: true,
-						cookies: [
-							{
-								name: 'dbc-tracking',
-								description:
-									'lorem ipsum dolor sit amet, consectetur adipis. lorem ipsu.',
+				banner: {
+					text:
+						'Cookies helfen uns bei der Bereitstellung unserer Dienste. Durch die Nutzung unserer Dienste erklärst du dich mit dem Einsatz von Cookies einverstanden. Weitere Informationen zum Thema Datenschutz findest du [hier](https://www.callabike.de/de/datenschutz).',
+				},
+				modal: {
+					headline: '### Consent Layer',
+					bodyText:
+						'Cookies helfen uns bei der Bereitstellung unserer Dienste. Durch die Nutzung unserer Dienste erklärst du dich mit dem Einsatz von Cookies einverstanden. Weitere Informationen zum Thema Datenschutz findest du [hier](https://www.callabike.de/de/datenschutz).',
+					layers: [
+						{
+							name: 'Notwendige Funktionen',
+							text:
+								'**Lorem ipsum dolor sit amet**, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et [Google](https://www.google.de) aliquyam',
+							fieldName: 'hello',
+							callbackFunction: 'hello',
+							setAsDefault: false,
+							cookieName: 'hello',
+							cookieValue: 'true',
+							cookieExpire: 2,
+							cookies: [
+								{
+									name: 'dbc-tracking',
+									description:
+										'lorem ipsum dolor sit amet, consectetur adipis. lorem ipsu.',
+									expire: '2 days',
+								},
+								{
+									name: '_trck',
+									description:
+										'lorem ipsum dolor sit amet, consectetur adipis. lorem ipsu.',
+									expire: '30 days',
+								},
+							],
+						},
+						{
+							name: 'Notwendige Funktionen',
+							text:
+								'**Lorem ipsum dolor sit amet**, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et [Google](https://www.google.de) aliquyam',
+							fieldName: 'test',
+							callbackFunction: 'hello',
+							setAsDefault: false,
+							cookieName: 'test',
+							cookieValue: 'true',
+							cookies: [
+								{
+									name: 'dbc-tracking',
+									description:
+										'lorem ipsum dolor sit amet, consectetur adipis. lorem ipsu.',
+									expire: '1 days',
+								},
+								{
+									name: '_trck',
+									description:
+										'lorem ipsum dolor sit amet, consectetur adipis. lorem ipsu.',
+									expire: '90 days',
+								},
+							],
+						},
+						{
+							name: 'Marketing',
+							text:
+								'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam',
+							fieldName: 'bye',
+							callbackFunction: 'bye',
+							setAsDefault: false,
+							cookieName: 'marketing',
+							cookieValue: 'true',
+							cookieExpire: 30,
+							cookies: [
+								{
+									name: 'marketing-cookie',
+									description:
+										'lorem ipsum dolor sit amet, consectetur adipis. lorem ipsu.',
+								},
+							],
+						},
+					],
+				},
+				settings: {
+					text: 'Cookie Einstellungen bearbeiten',
+				},
+				style: {
+					banner: {
+						background: '#ff00ff',
+						color: '#ddd',
+						buttons: {
+							accept: {
+								color: '#666',
+								background: '#222',
 							},
-						],
-					},
-					{
-						name: 'Marketing',
-						text:
-							'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam',
-						fieldName: 'bye',
-						callbackFunction: 'bye',
-						setAsDefault: false,
-						cookies: [
-							{
-								name: 'marketing-cookie',
-								description:
-									'lorem ipsum dolor sit amet, consectetur adipis. lorem ipsu.',
+							decline: {
+								color: '#111',
+								background: '#ccc',
 							},
-						],
+						},
 					},
-				],
+				},
 			}
 
-			function hello() {
-				if (document.getElementById('hello').checked === true) {
-					_paq.push(['setConsentGiven'])
-					_paq.push(['rememberConsentGiven'])
-					console.log('SEt Tracking on')
-				} else {
-					_paq.push(['forgetConsentGiven'])
-					_paq.push(['forgetConsentGiven'])
-					console.log('SEt Tracking off')
-				}
+			function hello(cookieSet) {
+				console.log(cookieSet)
 			}
 
-			function bye() {
-				console.log(document.getElementById('bye').checked)
-				if (document.getElementById('bye').checked === true) {
-					document.cookie = 'track=true'
-					console.log(document.cookie)
-				} else {
-					document.cookie = 'track=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/'
-					console.log(document.cookie)
-				}
+			function bye(cookieSet) {
+				console.log(cookieSet)
 			}
 		</script>
-		<script defer src="/build/consentlayer.js"></script>
+		<script defer src="/build/dbc-consentlayer.js"></script>
 	</body>
 </html>

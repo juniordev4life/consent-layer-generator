@@ -1,16 +1,28 @@
 import type { ConsentElement } from '../interface/IConsentElement'
 
 class ConsentLayerConfig {
-	headline: string
-	bodytext: string
 	matomo: boolean
-	layers: [ConsentElement]
+	banner: {
+		text: string
+	}
+	modal: {
+		headline: string
+		bodyText: string
+		layers: [ConsentElement]
+	}
 
-	constructor(headline: string, bodytext: string, matomo: boolean, layers: [ConsentElement]) {
-		this.headline = headline
-		this.bodytext = bodytext
+	constructor(
+		bannerText: string,
+		headline: string,
+		bodyText: string,
+		matomo: boolean,
+		layers: [ConsentElement],
+	) {
+		this.banner.text = bannerText
+		this.modal.headline = headline
+		this.modal.bodyText = bodyText
 		this.matomo = matomo
-		this.layers = layers
+		this.modal.layers = layers
 	}
 }
 

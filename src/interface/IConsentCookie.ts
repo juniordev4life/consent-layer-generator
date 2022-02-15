@@ -1,4 +1,4 @@
-export interface ConsentElement {
+export interface ConsentCookie {
 	name: string
 	description: string
 }

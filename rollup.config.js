@@ -36,7 +36,7 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'consentlayer',
-		file: 'public/build/consentlayer.js',
+		file: 'public/build/dbc-consentlayer.js',
 	},
 	plugins: [
 		svelte({
@@ -48,7 +48,7 @@ export default {
 		}),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
-		css({ output: 'bundle.css' }),
+		css({ output: 'dbc-consentlayer.css' }),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
